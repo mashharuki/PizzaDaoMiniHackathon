@@ -111,7 +111,7 @@ const StatItem: React.FC<{ icon: string; label: string; children: React.ReactNod
 const StatusPanel: React.FC<StatusPanelProps> = ({ score, highScore, status, rank }) => {
   const statusInfo = statusChip(status);
   return (
-    <div className="mt-6 w-full max-w-md">
+    <div className="mt-6 w-full max-w-md mx-auto">
       <div className="rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-800/40 p-[1px] shadow-lg">
         <div className="rounded-2xl bg-black/40 p-4 backdrop-blur-md sm:p-6">
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -143,4 +143,3 @@ const StatusPanel: React.FC<StatusPanelProps> = ({ score, highScore, status, ran
 };
 
 export default StatusPanel;
-

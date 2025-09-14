@@ -8,6 +8,7 @@ import {
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
 import { useCallback, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 /**
  * ヘッダーコンポーネント
@@ -15,6 +16,7 @@ import { useCallback, useMemo, useState } from 'react';
 export const Header = () => {
   const { context } = useMiniKit();
   const addFrame = useAddFrame();
+  const { address, isConnected } = useAccount();
 
   const [frameAdded, setFrameAdded] = useState(false);
 
@@ -52,8 +54,30 @@ export const Header = () => {
     return null;
   }, [context, frameAdded, handleAddFrame]);
 
+  // My NFT ボタン（Rarible Testnet への導線）
+  const myNftButton = useMemo(() => {
+    const url = address ? `https://testnet.rarible.com/user/${address}/owned` : '';
+    const handleClick = () => {
+      if (!url) return;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleClick}
+        disabled={!isConnected}
+        className="p-4"
+        icon={<Icon name="arrow-right" size="sm" />}
+      >
+        My NFT
+      </Button>
+    );
+  }, [address, isConnected]);
+
   return (
-    <header className="mb-3 flex h-11 items-center justify-between">
+    <header className="mb-3 flex h-11 w-full items-center justify-between">
       <div>
         <div className="flex items-center space-x-2">
           <Wallet className="z-10">
@@ -72,7 +96,10 @@ export const Header = () => {
           </Wallet>
         </div>
       </div>
-      <div>{saveFrameButton}</div>
+      <div className="flex items-center gap-2">
+        {saveFrameButton}
+        {myNftButton}
+      </div>
     </header>
   );
 };
