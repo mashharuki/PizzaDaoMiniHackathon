@@ -76,52 +76,63 @@ export default function Home() {
   return (
     <main
       ref={mainRef}
-      className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-24"
+      className="relative z-[1] flex min-h-screen flex-col items-center justify-center p-4 sm:p-10"
     >
       <Header />
       <ErrorDisplay error={error} onDismiss={clearError} />
-      <h1 className="mb-8 text-4xl font-bold">Pizza Roulette Game</h1>
+      <h1 className="mb-6 text-4xl font-extrabold tracking-tight heading-pop drop-shadow-sm">
+        Pizza Roulette Game
+      </h1>
       {isConnected ? (
         <>
-          <div className="relative">
-            <PizzaBoard
-              slices={gameState.pizzaSlices}
-              isSpinning={gameState.isSpinning}
-              onSliceClick={selectSlice}
-              width={boardSize}
-              height={boardSize}
-            />
-            {gameState.gameStatus === 'completed' && (
-              <SpecialPatternDisplay patterns={gameState.specialPatterns} />
-            )}
-          </div>
-          <StatusPanel
-            score={gameState.currentScore}
-            highScore={highScore}
-            status={gameState.gameStatus}
-            rank={gameState.rank}
-          />
-          <div className="mt-8">
-            {gameState.gameStatus === 'idle' && (
-              <button onClick={startGame} className="rounded bg-blue-500 px-4 py-2 text-white">
-                Start Game
-              </button>
-            )}
-            {gameState.gameStatus === 'completed' && (
-              <>
-                <TransactionCard calls={calls} onError={handleTransactionError} />
+          <div className="glass-card relative w-full max-w-[720px] p-5 sm:p-8">
+            <div className="relative flex w-full items-center justify-center">
+              <PizzaBoard
+                slices={gameState.pizzaSlices}
+                isSpinning={gameState.isSpinning}
+                onSliceClick={selectSlice}
+                width={boardSize}
+                height={boardSize}
+              />
+              {gameState.gameStatus === 'completed' && (
+                <SpecialPatternDisplay patterns={gameState.specialPatterns} />
+              )}
+            </div>
+            <div className="mt-6">
+              <StatusPanel
+                score={gameState.currentScore}
+                highScore={highScore}
+                status={gameState.gameStatus}
+                rank={gameState.rank}
+              />
+            </div>
+            <div className="mt-6 flex flex-col items-center">
+              {gameState.gameStatus === 'idle' && (
                 <button
-                  onClick={resetGame}
-                  className="mt-4 rounded bg-green-500 px-4 py-2 text-white"
+                  onClick={startGame}
+                  className="relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-[#FF5F6D] via-[#FFC371] to-[#42E695] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] focus:outline-none"
                 >
-                  Play Again
+                  <span className="relative z-10">Start Game</span>
                 </button>
-              </>
-            )}
+              )}
+              {gameState.gameStatus === 'completed' && (
+                <>
+                  <TransactionCard calls={calls} onError={handleTransactionError} />
+                  <button
+                    onClick={resetGame}
+                    className="mt-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#00D1FF] via-[#42E695] to-[#FFC371] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] focus:outline-none"
+                  >
+                    Play Again
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </>
       ) : (
-        <p className="text-yellow-400">Connect your wallet to play the game.</p>
+        <p className="glass-card px-4 py-3 text-sm text-[var(--app-foreground)]">
+          Connect your wallet to play the game.
+        </p>
       )}
     </main>
   );

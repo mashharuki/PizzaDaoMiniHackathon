@@ -104,6 +104,21 @@ body {
   font-style: normal;
 }
 
+/* Slightly dark vibe override (app-scoped) */
+:root[data-vibe='darkish'] {
+  --app-background: #0e1116;
+  --app-foreground: #eef2f8;
+  --app-foreground-muted: #b9c2d0;
+  --app-accent: #5aa2ff;
+  --app-accent-hover: #4a8ee0;
+  --app-accent-active: #3a74bf;
+  --app-accent-light: rgba(90, 162, 255, 0.15);
+  --app-gray: #141821;
+  --app-gray-dark: #1b2030;
+  --app-card-bg: rgba(16, 18, 27, 0.5);
+  --app-card-border: rgba(255, 255, 255, 0.08);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

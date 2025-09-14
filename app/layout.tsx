@@ -50,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-background">
+    <html lang="en" data-vibe="darkish">
+      <body className="bg-background pop-bg">
         {/* MiniKitProvider 等でアプリ全体をラップ */}
         <Providers>{children}</Providers>
       </body>
