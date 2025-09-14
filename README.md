@@ -1,8 +1,20 @@
 # Pizza Roulette Game (PizzaDAO × Ethreactor Mini Hackathon)
 
+## LiveDemo
+
+- Vercel
+
+  https://pizza-dao-mini-hackathon.vercel.app/
+
+- MiniApp
+
 ## 概要
 
-Pizza Roulette Game は Farcaster MiniApp として動作する 1 画面完結の Web3 ミニゲームです。ユーザーは回転する 12 分割のピザボードをタップしてピザを完成させ、最終スコアに応じてランク別の NFT を Base Sepolia 上でミントできます。Coinbase OnChainKit の MiniKit をフロントとトランザクション UX に活用し、モバイルでも快適に遊べるよう設計しています。
+Pizza Roulette Game は Farcaster MiniApp として動作する 1 画面完結の Web3 ミニゲームです。
+
+ユーザーは回転する 12 分割のピザボードをタップしてピザを完成させ、最終スコアに応じてランク別の NFT を Base Sepolia 上でミントできます。
+
+Coinbase OnChainKit の MiniKit をフロントとトランザクション UX に活用し、モバイルでも快適に遊べるよう設計しています。
 
 - 対象チェーン: Base Sepolia
 - NFT コントラクト: `utils/constants.ts` の `PIZZA_DAO_MINI_HACKATHON_ADDRESS` を参照
