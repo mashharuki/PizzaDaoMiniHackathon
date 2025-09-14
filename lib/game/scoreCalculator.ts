@@ -48,8 +48,9 @@ export const calculateScore = (slices: PizzaSlice[]): number => {
 };
 
 export const determineRank = (score: number): 'diamond' | 'gold' | 'silver' | 'bronze' => {
-  if (score >= 800) return 'diamond';
-  if (score >= 600) return 'gold';
-  if (score >= 400) return 'silver';
+  // Eased thresholds to make ranking more attainable
+  if (score >= 700) return 'diamond';
+  if (score >= 450) return 'gold';
+  if (score >= 250) return 'silver';
   return 'bronze';
 };
