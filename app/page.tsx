@@ -31,17 +31,14 @@ export default function Home() {
 
   // Farcaster Mini App: hide splash screen once content is ready
   useEffect(() => {
-    let mounted = true;
+    //@ts-nocheck 
     (async () => {
       try {
         await sdk.actions.ready();
       } catch (e) {
-        // noop: outside Farcaster environment this can be ignored
+        console.error(e)
       }
     })();
-    return () => {
-      mounted = false;
-    };
   }, []);
 
   useEffect(() => {
