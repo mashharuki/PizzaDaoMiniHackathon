@@ -9,7 +9,6 @@ import { GameErrorType } from '@/types/game';
 import { PIZZA_DAO_MINI_HACKATHON_ABI } from '@/utils/abis/PizzaDaoMiniHackathon';
 import { PIZZA_DAO_MINI_HACKATHON_ADDRESS } from '@/utils/constants';
 import { TransactionError } from '@coinbase/onchainkit/transaction';
-import html2canvas from 'html2canvas';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -43,20 +42,6 @@ export default function Home() {
       },
     ];
   }, [address, gameState.gameStatus, gameState.rank]);
-
-  const handleShare = async () => {
-    if (mainRef.current) {
-      const canvas = await html2canvas(mainRef.current);
-      const dataUrl = canvas.toDataURL();
-      console.log('Captured Image Data URL:', dataUrl);
-      /*
-      farcaster.composeCast({
-        text: `I scored ${gameState.currentScore} in Pizza Roulette Game! My rank is ${gameState.rank}.`,
-        embeds: [`https://chocolate-nice-gazelle-823.mypinata.cloud/ipfs/bafybeicqgesjwbsbs6kfe5mduz56o7ooeh7ynonjozel3lc5t2jer7v52a/${gameState.rank}`],
-      });
-      */
-    }
-  };
 
   const handleTransactionError = (err: TransactionError) => {
     setError({
@@ -102,12 +87,6 @@ export default function Home() {
                   className="mt-4 rounded bg-green-500 px-4 py-2 text-white"
                 >
                   Play Again
-                </button>
-                <button
-                  onClick={handleShare}
-                  className="mt-4 rounded bg-purple-500 px-4 py-2 text-white"
-                >
-                  Share on Farcaster
                 </button>
               </>
             )}
