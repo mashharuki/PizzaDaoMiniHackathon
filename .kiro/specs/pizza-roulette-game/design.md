@@ -17,14 +17,14 @@ graph TB
         B --> E[Score System]
         B --> F[NFT Mint]
     end
-    
+
     subgraph "Web3 Integration"
         C --> G[OnChainKit]
         F --> H[Base Sepolia]
         G --> I[Wallet Connection]
         H --> J[NFT Contract]
     end
-    
+
     subgraph "Farcaster Integration"
         A --> K[MiniAppKit]
         K --> L[Farcaster Context]
@@ -48,34 +48,34 @@ graph TB
 
 ```typescript
 interface GameState {
-  pizzaSlices: PizzaSlice[]
-  currentScore: number
-  gameStatus: 'idle' | 'playing' | 'completed'
-  isSpinning: boolean
-  rank: 'diamond' | 'gold' | 'silver' | 'bronze' | null
+  pizzaSlices: PizzaSlice[];
+  currentScore: number;
+  gameStatus: 'idle' | 'playing' | 'completed';
+  isSpinning: boolean;
+  rank: 'diamond' | 'gold' | 'silver' | 'bronze' | null;
 }
 
 interface PizzaSlice {
-  id: number
-  flavor: PizzaFlavor | null
-  position: number // 0-11 (12切れ)
+  id: number;
+  flavor: PizzaFlavor | null;
+  position: number; // 0-11 (12切れ)
 }
 
-type PizzaFlavor = 'margherita' | 'pepperoni' | 'mushroom' | 'hawaiian' | 'veggie' | 'meat'
+type PizzaFlavor = 'margherita' | 'pepperoni' | 'mushroom' | 'hawaiian' | 'veggie' | 'meat';
 ```
 
 ### 2. ピザボードコンポーネント
 
 ```typescript
 interface PizzaBoardProps {
-  slices: PizzaSlice[]
-  isSpinning: boolean
-  onSliceClick: (sliceId: number) => void
+  slices: PizzaSlice[];
+  isSpinning: boolean;
+  onSliceClick: (sliceId: number) => void;
 }
 
 interface PizzaBoardState {
-  rotation: number
-  animationDuration: number
+  rotation: number;
+  animationDuration: number;
 }
 ```
 
@@ -92,30 +92,30 @@ const { address } = useAccount();
 
 ```typescript
 interface ScoreCalculator {
-  calculateScore(slices: PizzaSlice[]): number
-  determineRank(score: number): GameRank
-  getAdjacentBonus(slices: PizzaSlice[]): number
-  getPerfectBonus(slices: PizzaSlice[]): number
-  detectSpecialPatterns(slices: PizzaSlice[]): SpecialPattern[]
+  calculateScore(slices: PizzaSlice[]): number;
+  determineRank(score: number): GameRank;
+  getAdjacentBonus(slices: PizzaSlice[]): number;
+  getPerfectBonus(slices: PizzaSlice[]): number;
+  detectSpecialPatterns(slices: PizzaSlice[]): SpecialPattern[];
 }
 
-type GameRank = 'diamond' | 'gold' | 'silver' | 'bronze'
+type GameRank = 'diamond' | 'gold' | 'silver' | 'bronze';
 
 interface SpecialPattern {
-  name: string
-  title: string
-  description: string
-  bonus: number
-  animation: string
-  emoji: string
+  name: string;
+  title: string;
+  description: string;
+  bonus: number;
+  animation: string;
+  emoji: string;
 }
 
 const RANK_THRESHOLDS = {
   diamond: 800,
   gold: 600,
   silver: 400,
-  bronze: 0
-} as const
+  bronze: 0,
+} as const;
 
 const SPECIAL_PATTERNS = {
   ROYAL_STRAIGHT_PIZZA_FLUSH: {
@@ -124,7 +124,7 @@ const SPECIAL_PATTERNS = {
     description: '全て同じ味で完璧なピザを完成！まさに伝説のピザ職人！',
     bonus: 500,
     animation: 'rainbow-explosion',
-    emoji: '👑🍕✨'
+    emoji: '👑🍕✨',
   },
   PIZZA_MASTER: {
     name: 'pizza_master',
@@ -132,7 +132,7 @@ const SPECIAL_PATTERNS = {
     description: '6切れ以上の連続同味！あなたはピザの達人です！',
     bonus: 200,
     animation: 'golden-sparkle',
-    emoji: '🎖️🍕'
+    emoji: '🎖️🍕',
   },
   BALANCE_CRAFTSMAN: {
     name: 'balance_craftsman',
@@ -140,7 +140,7 @@ const SPECIAL_PATTERNS = {
     description: '4種類の味を均等配置！完璧なバランス感覚！',
     bonus: 150,
     animation: 'harmony-wave',
-    emoji: '⚖️🍕'
+    emoji: '⚖️🍕',
   },
   COMBO_KING: {
     name: 'combo_king',
@@ -148,7 +148,7 @@ const SPECIAL_PATTERNS = {
     description: '隣接ボーナス5回達成！連続技の王者！',
     bonus: 100,
     animation: 'combo-flash',
-    emoji: '🔥🍕'
+    emoji: '🔥🍕',
   },
   RAINBOW_PIZZA: {
     name: 'rainbow_pizza',
@@ -156,7 +156,7 @@ const SPECIAL_PATTERNS = {
     description: '全6種類の味を使用！多様性の美しさ！',
     bonus: 120,
     animation: 'rainbow-spin',
-    emoji: '🌈🍕'
+    emoji: '🌈🍕',
   },
   LUCKY_SEVEN: {
     name: 'lucky_seven',
@@ -164,36 +164,36 @@ const SPECIAL_PATTERNS = {
     description: '7切れが同じ味！幸運のピザ！',
     bonus: 77,
     animation: 'lucky-stars',
-    emoji: '🍀🍕'
-  }
-} as const
+    emoji: '🍀🍕',
+  },
+} as const;
 ```
 
 ### 5. NFTミントコンポーネント
 
 ```typescript
 interface NFTMintProps {
-  rank: GameRank
-  score: number
-  flavorCombination: string
-  onMintSuccess: (tokenId: number) => void
-  onMintError: (error: Error) => void
+  rank: GameRank;
+  score: number;
+  flavorCombination: string;
+  onMintSuccess: (tokenId: number) => void;
+  onMintError: (error: Error) => void;
 }
 
 interface NFTMetadata {
-  name: string
-  description: string
-  image: string
+  name: string;
+  description: string;
+  image: string;
   attributes: Array<{
-    trait_type: string
-    value: string | number
-  }>
+    trait_type: string;
+    value: string | number;
+  }>;
 }
 
 // safeMint関数の呼び出し用インターフェース
 interface MintParams {
-  to: string // ウォレットアドレス
-  uri: string // メタデータURI
+  to: string; // ウォレットアドレス
+  uri: string; // メタデータURI
 }
 ```
 
@@ -385,20 +385,20 @@ export function Providers(props: { children: ReactNode }) {
 ```typescript
 // ゲーム状態のContext
 interface GameContextType {
-  gameState: GameState
-  startGame: () => void
-  spinBoard: () => void
-  selectSlice: (sliceId: number) => void
-  resetGame: () => void
-  mintNFT: () => Promise<void>
+  gameState: GameState;
+  startGame: () => void;
+  spinBoard: () => void;
+  selectSlice: (sliceId: number) => void;
+  resetGame: () => void;
+  mintNFT: () => Promise<void>;
 }
 
 // ローカルストレージ用のデータ構造
 interface GameHistory {
-  gamesPlayed: number
-  highScore: number
-  nftsMinted: number
-  lastPlayedAt: string
+  gamesPlayed: number;
+  highScore: number;
+  nftsMinted: number;
+  lastPlayedAt: string;
 }
 ```
 
@@ -495,13 +495,13 @@ enum GameErrorType {
   NETWORK_MISMATCH = 'NETWORK_MISMATCH',
   NFT_MINT_FAILED = 'NFT_MINT_FAILED',
   INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS',
-  GAME_STATE_ERROR = 'GAME_STATE_ERROR'
+  GAME_STATE_ERROR = 'GAME_STATE_ERROR',
 }
 
 interface GameError {
-  type: GameErrorType
-  message: string
-  details?: any
+  type: GameErrorType;
+  message: string;
+  details?: any;
 }
 ```
 
@@ -516,9 +516,9 @@ interface GameError {
 
 ```typescript
 interface ErrorDisplayProps {
-  error: GameError | null
-  onRetry?: () => void
-  onDismiss: () => void
+  error: GameError | null;
+  onRetry?: () => void;
+  onDismiss: () => void;
 }
 ```
 
@@ -593,20 +593,20 @@ interface ErrorDisplayProps {
 
 ```typescript
 const PIZZA_COLORS = {
-  margherita: '#FF6B6B',    // 赤（トマト）
-  pepperoni: '#FF8E53',     // オレンジ
-  mushroom: '#4ECDC4',      // ティール
-  hawaiian: '#FFE66D',      // 黄色（パイナップル）
-  veggie: '#95E1D3',        // 緑
-  meat: '#A8E6CF'           // ライトグリーン
-} as const
+  margherita: '#FF6B6B', // 赤（トマト）
+  pepperoni: '#FF8E53', // オレンジ
+  mushroom: '#4ECDC4', // ティール
+  hawaiian: '#FFE66D', // 黄色（パイナップル）
+  veggie: '#95E1D3', // 緑
+  meat: '#A8E6CF', // ライトグリーン
+} as const;
 
 const RANK_COLORS = {
-  diamond: '#B9F2FF',       // ダイアモンドブルー
-  gold: '#FFD700',          // ゴールド
-  silver: '#C0C0C0',        // シルバー
-  bronze: '#CD7F32'         // ブロンズ
-} as const
+  diamond: '#B9F2FF', // ダイアモンドブルー
+  gold: '#FFD700', // ゴールド
+  silver: '#C0C0C0', // シルバー
+  bronze: '#CD7F32', // ブロンズ
+} as const;
 ```
 
 ### アニメーション
@@ -649,7 +649,7 @@ pizza-roulette-game/
 │   ├── providers.tsx             # 全コンポーネント共通のプロバイダーコンポーネント
 │   └── page.tsx                  # メインゲームページ
 ├── css
-│   ├── globals.css               # グローバルスタイル              
+│   ├── globals.css               # グローバルスタイル
 │   └── theme.css                 # テーマスタイル
 ├── components/                   # Reactコンポーネント
 │   ├── game/                     # ゲーム関連コンポーネント
@@ -661,10 +661,10 @@ pizza-roulette-game/
 │   ├── wallet/                   # ウォレット関連
 │   │   └── WalletConnect.tsx     # ウォレット接続
 │   └── ui/                       # 共通UIコンポーネント
-├── lib/    
+├── lib/
 │   ├── notification-client.ts
 │   ├── notification.ts
-│   ├── redis.ts                
+│   ├── redis.ts
 │   └── game/                     # ゲームロジック
 │       ├── scoreCalculator.ts    # スコア計算
 │       ├── patternDetector.ts    # 特別パターン検出

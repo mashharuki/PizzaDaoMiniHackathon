@@ -1,4 +1,4 @@
-import { Abi } from "viem";
+import { Abi } from 'viem';
 
 export const SHOOTING_GAME_NFT_ABI: Abi = [
   {
@@ -28,5 +28,5 @@ export const SHOOTING_GAME_NFT_ABI: Abi = [
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
-  }
+  },
 ];

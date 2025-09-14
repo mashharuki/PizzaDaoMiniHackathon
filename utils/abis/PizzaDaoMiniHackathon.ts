@@ -1,0 +1,26 @@
+export const PIZZA_DAO_MINI_HACKATHON_ABI = [
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'uri',
+        type: 'string',
+      },
+    ],
+    name: 'safeMint',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+] as const;

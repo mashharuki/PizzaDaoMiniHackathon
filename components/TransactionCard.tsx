@@ -18,18 +18,19 @@ import { useAccount } from 'wagmi';
 
 type TransactionProps = {
   calls: {
-    address: `0x${string}`,
-    abi: Abi,
-    functionName: string,
-    args: (string | number | bigint | boolean | `0x${string}`)[],
+    address: `0x${string}`;
+    abi: Abi;
+    functionName: string;
+    args: (string | number | bigint | boolean | `0x${string}`)[];
   }[];
+  onError?: (error: TransactionError) => void;
 };
 
 /**
  * トランザクションカードコンポーネント
  * @returns
  */
-export function TransactionCard({ calls }: TransactionProps) {
+export function TransactionCard({ calls, onError }: TransactionProps) {
   const { address } = useAccount();
 
   const sendNotification = useNotification();
@@ -55,11 +56,7 @@ export function TransactionCard({ calls }: TransactionProps) {
   return (
     <div className="w-full">
       {address ? (
-        <Transaction
-          calls={calls}
-          onSuccess={handleSuccess}
-          onError={(error: TransactionError) => console.error('Transaction failed:', error)}
-        >
+        <Transaction calls={calls} onSuccess={handleSuccess} onError={onError}>
           <TransactionButton className="text-md text-white" text="Mint NFT" />
           <TransactionStatus>
             <TransactionStatusAction />

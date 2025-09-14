@@ -5,16 +5,18 @@ inclusion: always
 ## 技術スタック
 
 ### 全体
+
 - **パッケージマネージャー**: pnpm
 - **ランタイム**: Node.js
 - **フォーマッター**: prittier
 
 ### フロントエンド
+
 - **フレームワーク**: Next.js (App Router)
 - **言語**: TypeScript
-- **スタイリング**: 
+- **スタイリング**:
   - TailwindCSS
-- **ライブラリ**： 
+- **ライブラリ**：
   - viem
   - wagmi
   - @farcaster/frame-sdk
@@ -24,6 +26,7 @@ inclusion: always
 - **状態管理**: useState
 
 ### インフラ・DevOps
+
 - **CI/CD**: GitHub Actions
 
 #### .gitignore
@@ -52,4 +55,3 @@ inclusion: always
 - `.gitignore`: 必須除外項目
   - `**/node_modules`
   - `**/.DS_Store`
-

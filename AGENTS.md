@@ -10,7 +10,7 @@
 - `.kiro/specs` フォルダが存在する場合、その中にあるプロジェクトの仕様書を読み込み、仕様書に基づいて実装を行ってください。
   - 例えば シューティングゲーム用の仕様書だったら `shooting-game` というフォルダがあるはずです。
   - その場合、フォルダ内にある仕様書をすべて読み込み、仕様書に基づいて実装を行ってください。
-    - requirements.md : 要件定義書  
+    - requirements.md : 要件定義書
     - design.md: 設計書
     - tasks.md
   - 仕様書がない場合は、実装を開始する前に必ず仕様書を作成してください。
@@ -34,7 +34,7 @@
 
 ### requirements.md
 
-```markdown
+````markdown
 # AMM DEX 設計書
 
 ## 概要
@@ -77,6 +77,7 @@ graph TB
     Router --> JPYC
     Router --> PYUSD
 ```
+````
 
 ### レイヤー構成
 
@@ -764,7 +765,8 @@ export const useAppStore = create<AppState>((set) => ({
 4. **ウォレット接続の検証**
 
 この設計書に基づいて、次のフェーズでタスクリストを作成し、段階的な実装を進めていきます。
-```
+
+````
 
 ### design.md
 
@@ -897,7 +899,7 @@ Ethereum Sepolia テストネットワーク上で動作する自動マーケッ
 4. WHEN ネットワークエラーが発生 THEN システム SHALL 自動的に再試行し、3回失敗後にエラーメッセージを表示する
 5. IF トークン承認が必要な場合 THEN システム SHALL 承認トランザクションを先に実行するよう案内する
 6. WHEN 大きな価格影響が予想される THEN システム SHALL 警告メッセージと確認ダイアログを表示する
-```
+````
 
 ### tasks.md
 
@@ -1182,24 +1184,23 @@ Ethereum Sepolia テストネットワーク上で動作する自動マーケッ
 - コメントは必要に応じて記述し、記述する場合は日本語で記述する
 
   以下にコメントのルールを示します。
-
   - 変数系へのコメントのルール
 
     ```ts
     // 変数の概要を記述する
-    const variableName: Type = value; 
+    const variableName: Type = value;
     ```
 
   - メソッド系へのコメントのルール
 
     ```ts
     /**
-    * メソッドの概要を記述する
-    *
-    * @param param1 パラメータ1の説明
-    * @param param2 パラメータ2の説明
-    * @returns 戻り値の説明
-    */
+     * メソッドの概要を記述する
+     *
+     * @param param1 パラメータ1の説明
+     * @param param2 パラメータ2の説明
+     * @returns 戻り値の説明
+     */
     function methodName(param1: Type1, param2: Type2): ReturnType {
       // メソッドの処理内容を記述する
     }
@@ -1230,7 +1231,7 @@ Ethereum Sepolia テストネットワーク上で動作する自動マーケッ
 
 ```bash
 ├── README.md               # README.md
-├── template                # Base Mini Appを開発するためのテンプレートプロジェクト  
+├── template                # Base Mini Appを開発するためのテンプレートプロジェクト
 ├── app
 │   ├── api
 │   │   ├── .well-known
@@ -1267,19 +1268,22 @@ Ethereum Sepolia テストネットワーク上で動作する自動マーケッ
     ├── abis          # ABI格納用フォルダ
     └── constants.ts  # 定数用フォルダ
 ```
+
 ## 技術スタック
 
 ### 全体
+
 - **パッケージマネージャー**: pnpm
 - **ランタイム**: Node.js
 - **フォーマッター**: prittier
 
 ### フロントエンド
+
 - **フレームワーク**: Next.js (App Router)
 - **言語**: TypeScript
-- **スタイリング**: 
+- **スタイリング**:
   - TailwindCSS
-- **ライブラリ**： 
+- **ライブラリ**：
   - viem
   - wagmi
   - @farcaster/frame-sdk
@@ -1289,6 +1293,7 @@ Ethereum Sepolia テストネットワーク上で動作する自動マーケッ
 - **状態管理**: useState
 
 ### インフラ・DevOps
+
 - **CI/CD**: GitHub Actions
 
 #### .gitignore

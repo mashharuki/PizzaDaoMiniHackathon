@@ -19,7 +19,7 @@ inclusion: always
 
 ```bash
 ├── README.md               # README.md
-├── template                # Base Mini Appを開発するためのテンプレートプロジェクト  
+├── template                # Base Mini Appを開発するためのテンプレートプロジェクト
 ├── app
 │   ├── api
 │   │   ├── .well-known

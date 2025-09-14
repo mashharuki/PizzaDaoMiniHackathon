@@ -1,41 +1,127 @@
 'use client';
 
-// MiniKit の各種フックを用いたメインの画面コンポーネント。
-// - フレームの保存（addFrame）
-// - Wallet 連携 UI（OnchainKit）
-// - 簡易的なタブ切り替え（Home / Features）
+import { PizzaBoard, ScoreDisplay, SpecialPatternDisplay } from '@/components/Game';
+import { TransactionCard } from '@/components/TransactionCard';
+import ErrorDisplay from '@/components/common/ErrorDisplay';
+import { Header } from '@/components/common/Header';
+import { useGame } from '@/lib/game/gameState';
+import { GameErrorType } from '@/types/game';
+import { PIZZA_DAO_MINI_HACKATHON_ABI } from '@/utils/abis/PizzaDaoMiniHackathon';
+import { PIZZA_DAO_MINI_HACKATHON_ADDRESS } from '@/utils/constants';
+import { TransactionError } from '@coinbase/onchainkit/transaction';
+import html2canvas from 'html2canvas';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useAccount } from 'wagmi';
 
-import { Footer, Header } from '@/components/common';
-import { Home } from '@/components/DemoComponents';
-import { useMiniKit } from '@coinbase/onchainkit/minikit';
-import { useEffect } from 'react';
-
-/**
- * App コンポーネント
- * @returns
- */
-export default function App() {
-  // MiniKit のコンテキスト（フレーム準備完了フラグやクライアント状態）
-  const { setFrameReady, isFrameReady } = useMiniKit();
+export default function Home() {
+  const { gameState, highScore, error, startGame, selectSlice, resetGame, setError, clearError } =
+    useGame();
+  const { address, isConnected } = useAccount();
+  const mainRef = useRef<HTMLDivElement>(null);
+  const [boardSize, setBoardSize] = useState(320);
 
   useEffect(() => {
-    if (!isFrameReady) {
-      setFrameReady();
+    const handleResize = () => {
+      setBoardSize(Math.min(window.innerWidth - 48, 320));
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const calls = useMemo(() => {
+    if (!address || gameState.gameStatus !== 'completed' || !gameState.rank) {
+      return [];
     }
-  }, [setFrameReady, isFrameReady]);
+    const metadataURI = `${gameState.rank}`;
+    return [
+      {
+        address: PIZZA_DAO_MINI_HACKATHON_ADDRESS as `0x${string}`,
+        abi: PIZZA_DAO_MINI_HACKATHON_ABI,
+        functionName: 'safeMint',
+        args: [address, metadataURI],
+      },
+    ];
+  }, [address, gameState.gameStatus, gameState.rank]);
+
+  const handleShare = async () => {
+    if (mainRef.current) {
+      const canvas = await html2canvas(mainRef.current);
+      const dataUrl = canvas.toDataURL();
+      console.log('Captured Image Data URL:', dataUrl);
+      /*
+      farcaster.composeCast({
+        text: `I scored ${gameState.currentScore} in Pizza Roulette Game! My rank is ${gameState.rank}.`,
+        embeds: [`https://chocolate-nice-gazelle-823.mypinata.cloud/ipfs/bafybeicqgesjwbsbs6kfe5mduz56o7ooeh7ynonjozel3lc5t2jer7v52a/${gameState.rank}`],
+      });
+      */
+    }
+  };
+
+  const handleTransactionError = (err: TransactionError) => {
+    setError({
+      type: GameErrorType.NFT_MINT_FAILED,
+      message: 'Failed to mint NFT.',
+      details: err.message,
+    });
+  };
 
   return (
-    <div className="mini-app-theme flex min-h-screen flex-col from-[var(--app-background)] to-[var(--app-gray)] font-sans text-[var(--app-foreground)]">
-      <div className="mx-auto w-full max-w-md px-4 py-3">
-        {/* ヘッダー */}
-        <Header />
-        {/* メインコンポーネント */}
-        <main className="flex-1">
-          <Home />
-        </main>
-        {/* フッター */}
-        <Footer />
-      </div>
-    </div>
+    <main
+      ref={mainRef}
+      className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-24"
+    >
+      <Header />
+      <ErrorDisplay error={error} onDismiss={clearError} />
+      <h1 className="mb-8 text-4xl font-bold">Pizza Roulette Game</h1>
+      {isConnected ? (
+        <>
+          <div className="relative">
+            <PizzaBoard
+              slices={gameState.pizzaSlices}
+              isSpinning={gameState.isSpinning}
+              onSliceClick={selectSlice}
+              width={boardSize}
+              height={boardSize}
+            />
+            {gameState.gameStatus === 'completed' && (
+              <SpecialPatternDisplay patterns={gameState.specialPatterns} />
+            )}
+          </div>
+          <div className="mt-8">
+            {gameState.gameStatus === 'idle' && (
+              <button onClick={startGame} className="rounded bg-blue-500 px-4 py-2 text-white">
+                Start Game
+              </button>
+            )}
+            {gameState.gameStatus === 'completed' && (
+              <>
+                <TransactionCard calls={calls} onError={handleTransactionError} />
+                <button
+                  onClick={resetGame}
+                  className="mt-4 rounded bg-green-500 px-4 py-2 text-white"
+                >
+                  Play Again
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="mt-4 rounded bg-purple-500 px-4 py-2 text-white"
+                >
+                  Share on Farcaster
+                </button>
+              </>
+            )}
+          </div>
+          <div className="mt-4">
+            <ScoreDisplay score={gameState.currentScore} />
+            <p>High Score: {highScore}</p>
+            <p>Status: {gameState.gameStatus}</p>
+            <p>Rank: {gameState.rank}</p>
+          </div>
+        </>
+      ) : (
+        <p className="text-yellow-400">Connect your wallet to play the game.</p>
+      )}
+    </main>
   );
 }
