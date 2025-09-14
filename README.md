@@ -43,7 +43,7 @@ We leverage Coinbase OnChainKit’s MiniKit for the front-end and transaction UX
 
 ```mermaid
 graph TB
-  subgraph Frontend (Next.js App Router)
+  subgraph Frontend
     Page[app/page.tsx]
     Providers[app/providers.tsx]
     Page --> Game[components/Game/*]
