@@ -1,37 +1,45 @@
 # Pizza Roulette Game (PizzaDAO × Ethreactor Mini Hackathon)
 
-## LiveDemo
+## Live Demo
 
 - Vercel
 
-  https://pizza-dao-mini-hackathon.vercel.app/
+  [WebApp URL](https://pizza-dao-mini-hackathon.vercel.app/)
 
 - MiniApp
 
-## 概要
+  [Casted MiniApp](https://farcaster.xyz/mashharuki/0x38f8d234)
 
-Pizza Roulette Game は Farcaster MiniApp として動作する 1 画面完結の Web3 ミニゲームです。
+  [Registered MiniApp](https://farcaster.xyz/miniapps/__UcwcJwPaVN/mini-pizza-game)
 
-ユーザーは回転する 12 分割のピザボードをタップしてピザを完成させ、最終スコアに応じてランク別の NFT を Base Sepolia 上でミントできます。
+- NFT
 
-Coinbase OnChainKit の MiniKit をフロントとトランザクション UX に活用し、モバイルでも快適に遊べるよう設計しています。
+  [Rarible Testnet](https://testnet.rarible.com/token/base/0x52D89afa637AEF34A6b680c77B366F3c854485d4:0)
 
-- 対象チェーン: Base Sepolia
-- NFT コントラクト: `utils/constants.ts` の `PIZZA_DAO_MINI_HACKATHON_ADDRESS` を参照
-- ミント関数: `safeMint(address to, string uri)`（ABI は `utils/abis/PizzaDaoMiniHackathon.ts`）
+## Overview
 
-## 主要機能
+Pizza Roulette Game is a single-screen Web3 mini-game that runs as a Farcaster MiniApp.
 
-- ウォレット接続（OnChainKit / Base Sepolia への接続確認）
-- ゲームプレイ（12 切れピザボード、回転・タップ操作、6 種類の味をランダム配置）
-- スコアリング（基本点・隣接ボーナス・連続ボーナス・パーフェクトボーナス）
-- ランク判定（Diamond / Gold / Silver / Bronze）
-- 特別パターン検出と演出（例: ロイヤルストレートピザフラッシュ、ピザマスター など）
-- NFT ミント（ゲーム終了後にランク別メタデータ URI を指定してミント）
-- Farcaster MiniApp 連携（MiniKit コンテキスト、Save Frame 動線）
-- レスポンシブ対応（モバイル最適化）
+Players tap a rotating 12-slice pizza board to complete a pizza and, based on their final score, can mint a rank-based NFT on Base Sepolia.
 
-## アーキテクチャ
+We leverage Coinbase OnChainKit’s MiniKit for the front-end and transaction UX to provide a smooth mobile experience.
+
+- Target chain: Base Sepolia
+- NFT contract: See `PIZZA_DAO_MINI_HACKATHON_ADDRESS` in `utils/constants.ts`
+- Mint function: `safeMint(address to, string uri)` (ABI in `utils/abis/PizzaDaoMiniHackathon.ts`)
+
+## Key Features
+
+- Wallet connection (OnChainKit / checks connection to Base Sepolia)
+- Gameplay (12-slice pizza board, rotation/tap controls, 6 flavors placed randomly)
+- Scoring (base points, adjacency bonus, streak bonus, perfect bonus)
+- Rank judgment (Diamond / Gold / Silver / Bronze)
+- Special pattern detection and effects (e.g., Royal Straight Pizza Flush, Pizza Master)
+- NFT minting (after the game, mint with a rank-specific metadata URI)
+- Farcaster MiniApp integration (MiniKit context, Save Frame flow)
+- Responsive design (mobile-optimized)
+
+## Architecture
 
 ```mermaid
 graph TB
@@ -61,80 +69,80 @@ graph TB
   end
 ```
 
-### ディレクトリ構成（抜粋）
+### Directory Structure (Excerpt)
 
 ```
 app/
-  ├─ page.tsx            # メインゲームページ
+  ├─ page.tsx            # Main game page
   └─ providers.tsx       # OnChainKit MiniKit Provider
 components/
-  ├─ Game/               # PizzaBoard, ScoreDisplay, SpecialPatternDisplay 等
-  ├─ common/             # Header, ErrorDisplay, Button, Icon 等
-  └─ TransactionCard.tsx # トランザクション UI（ミント時に使用）
+  ├─ Game/               # PizzaBoard, ScoreDisplay, SpecialPatternDisplay, etc.
+  ├─ common/             # Header, ErrorDisplay, Button, Icon, etc.
+  └─ TransactionCard.tsx # Transaction UI (used when minting)
 lib/
   └─ game/               # scoreCalculator, patternDetector, gameState
-types/                   # ゲーム関連型定義
+types/                   # Game-related type definitions
 utils/
-  ├─ abis/               # コントラクト ABI
-  └─ constants.ts        # コントラクトアドレス・特殊パターン定義
-.kiro/specs/pizza-roulette-game/  # 要件・設計・タスクの仕様書
+  ├─ abis/               # Contract ABIs
+  └─ constants.ts        # Contract address and special pattern definitions
+.kiro/specs/pizza-roulette-game/  # Requirements, design, and task specs
 ```
 
-## 技術スタック
+## Tech Stack
 
-| カテゴリ        | 採用技術                                | バージョン/備考 |
-|-----------------|-----------------------------------------|-----------------|
-| Framework       | Next.js                                 | 15.x, App Router|
-| Language        | TypeScript                              | strict 有効     |
-| UI/Styling      | Tailwind CSS                            | prettier-plugin-tailwindcss 連携 |
-| State/Query     | React Hooks, @tanstack/react-query      |                 |
-| Web3            | Coinbase OnChainKit (MiniKit/Tx/Wallet) | `@coinbase/onchainkit` |
-| Web3 Low-level  | wagmi, viem                             | wagmi 2.x / viem 2.x |
-| Farcaster       | @farcaster/miniapp-sdk, frame-sdk       | MiniApp 連携    |
-| Chain           | Base Sepolia                            | テストネット    |
-| Data/Cache      | Upstash Redis                           | 任意（env で設定） |
-| Tooling         | ESLint, Prettier, Tailwind, TypeScript  |                 |
+| Category        | Technology                               | Version/Notes |
+|-----------------|-------------------------------------------|---------------|
+| Framework       | Next.js                                   | 15.x, App Router |
+| Language        | TypeScript                                | strict enabled |
+| UI/Styling      | Tailwind CSS                              | integrates with prettier-plugin-tailwindcss |
+| State/Query     | React Hooks, @tanstack/react-query        |               |
+| Web3            | Coinbase OnChainKit (MiniKit/Tx/Wallet)   | `@coinbase/onchainkit` |
+| Web3 Low-level  | wagmi, viem                               | wagmi 2.x / viem 2.x |
+| Farcaster       | @farcaster/miniapp-sdk, frame-sdk         | MiniApp integration |
+| Chain           | Base Sepolia                              | testnet |
+| Data/Cache      | Upstash Redis                             | optional (configure via env) |
+| Tooling         | ESLint, Prettier, Tailwind, TypeScript    | |
 
-## コマンド一覧
+## Commands
 
-| タスク               | コマンド         | 説明 |
-|----------------------|------------------|------|
-| 依存関係のインストール | `pnpm i`         | 初回セットアップや依存更新に使用 |
-| 開発サーバ起動        | `pnpm dev`       | http://localhost:3000 を起動 |
-| ビルド                | `pnpm build`     | 本番ビルド（型チェックを含む） |
-| 本番起動              | `pnpm start`     | ビルド済み成果物を起動 |
-| Lint                  | `pnpm lint`      | ESLint による静的解析 |
-| フォーマット          | `pnpm format`    | Prettier による整形 |
+| Task                  | Command         | Description |
+|-----------------------|-----------------|-------------|
+| Install dependencies  | `pnpm i`        | Initial setup or dependency updates |
+| Start dev server      | `pnpm dev`      | Launches http://localhost:3000 |
+| Build                 | `pnpm build`    | Production build (includes type checking) |
+| Start (production)    | `pnpm start`    | Runs the built output |
+| Lint                  | `pnpm lint`     | Static analysis via ESLint |
+| Format                | `pnpm format`   | Formatting via Prettier |
 
-## セットアップ
+## Setup
 
-1) 依存関係のインストール
+1) Install dependencies
 
 ```
 pnpm i
 ```
 
-2) 環境変数ファイルの準備（`.env.example` を参考に `.env.local` を作成）
+2) Prepare environment variables (create `.env.local` using `.env.example` as a reference)
 
-- `NEXT_PUBLIC_ONCHAINKIT_API_KEY` など OnChainKit の公開キー/ブランディング設定
-- `NEXT_PUBLIC_URL`（デプロイ URL）と `NEXT_PUBLIC_ICON_URL` 等の参照を整備
-- 必要に応じて `REDIS_URL` / `REDIS_TOKEN` を設定
+- `NEXT_PUBLIC_ONCHAINKIT_API_KEY`, and other OnChainKit public keys/branding settings
+- Configure `NEXT_PUBLIC_URL` (deploy URL) and references like `NEXT_PUBLIC_ICON_URL`
+- Optionally set `REDIS_URL` / `REDIS_TOKEN`
 
-3) 開発サーバ起動
+3) Start the development server
 
 ```
 pnpm dev
 ```
 
-## 開発ガイド
+## Development Guide
 
-- 仕様書は `.kiro/specs/pizza-roulette-game/` を参照（要件/設計/タスク）
-- Web3 連携は `app/providers.tsx` の MiniKitProvider、トランザクションは `components/TransactionCard.tsx` を経由
-- ゲームロジックは `lib/game/*` に集約（スコア計算・パターン検出・状態管理）
-- コントラクトアドレス/ABI は `utils/constants.ts` / `utils/abis/*` を参照
+- See `.kiro/specs/pizza-roulette-game/` for the specs (requirements/design/tasks)
+- Web3 integration uses the MiniKitProvider in `app/providers.tsx`; transactions go through `components/TransactionCard.tsx`
+- Game logic is consolidated in `lib/game/*` (scoring, pattern detection, state management)
+- Contract address/ABI references are in `utils/constants.ts` and `utils/abis/*`
 
-## 注意事項
+## Notes
 
-- テストネット（Base Sepolia）用であり、本番資産を扱わないでください
-- `.env.local` は秘匿情報を含むため VCS にコミットしないでください
-- コントラクトアドレスやメタデータ URI はデプロイ状況に合わせて更新してください
+- This project targets the Base Sepolia testnet. Do not use with real assets.
+- Do not commit `.env.local` (it contains secrets).
+- Update contract addresses and metadata URIs according to your deployment status.
