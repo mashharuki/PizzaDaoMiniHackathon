@@ -1,5 +1,9 @@
 # Pizza Roulette Game (PizzaDAO × Ethreactor Mini Hackathon)
 
+## Event Page
+
+[Luma - PizzaDAO × Ethreactor Mini Hackathon @ ETHTokyo '25](https://luma.com/p6leyvgj?tk=JuHl69)
+
 ## LiveDemo
 
 - Vercel
