@@ -66,6 +66,30 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
     return `M${center},${center} L${start.x},${start.y} A${radius},${radius} 0 0,1 ${end.x},${end.y} Z`;
   };
 
+  // スライスのリング（内外半径の間のドーナツ型ウェッジ）
+  const getRingPath = (index: number, innerR: number, outerR: number) => {
+    const angle = 30; // 360 / 12
+    const startAngleDeg = index * angle;
+    const endAngleDeg = startAngleDeg + angle;
+    const startInner = {
+      x: center + innerR * Math.cos((startAngleDeg * Math.PI) / 180),
+      y: center + innerR * Math.sin((startAngleDeg * Math.PI) / 180),
+    };
+    const endInner = {
+      x: center + innerR * Math.cos((endAngleDeg * Math.PI) / 180),
+      y: center + innerR * Math.sin((endAngleDeg * Math.PI) / 180),
+    };
+    const startOuter = {
+      x: center + outerR * Math.cos((startAngleDeg * Math.PI) / 180),
+      y: center + outerR * Math.sin((startAngleDeg * Math.PI) / 180),
+    };
+    const endOuter = {
+      x: center + outerR * Math.cos((endAngleDeg * Math.PI) / 180),
+      y: center + outerR * Math.sin((endAngleDeg * Math.PI) / 180),
+    };
+    return `M ${startInner.x},${startInner.y} A ${innerR},${innerR} 0 0,1 ${endInner.x},${endInner.y} L ${endOuter.x},${endOuter.y} A ${outerR},${outerR} 0 0,0 ${startOuter.x},${startOuter.y} Z`;
+  };
+
   const renderToppings = (flavor: PizzaFlavor, center: number, radius: number, index: number) => {
     const toppings: JSX.Element[] = [];
     const sliceAngle = 30;
@@ -86,6 +110,24 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
 
     // 汎用の回転角
     const randDeg = () => randBetween(rng, -60, 60);
+
+    // チーズの焦げ（焼きムラ）
+    const pushCheeseSpots = (count: number) => {
+      for (let i = 0; i < count; i++) {
+        const { x, y } = randomPointInSlice(0.25, 0.8);
+        const r = randBetween(rng, radius * 0.015, radius * 0.03);
+        toppings.push(
+          <circle
+            key={`cheese-spot-${index}-${i}`}
+            cx={x}
+            cy={y}
+            r={r}
+            fill="url(#cheeseSpotGrad)"
+            opacity={0.5}
+          />
+        );
+      }
+    };
 
     const pushPepperoni = (count: number) => {
       for (let i = 0; i < count; i++) {
@@ -298,6 +340,9 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
       }
     };
 
+    // まず共通のチーズ焦げを追加
+    pushCheeseSpots(3 + Math.floor(rng() * 3));
+
     switch (flavor) {
       case 'pepperoni':
         pushPepperoni(4 + Math.floor(rng() * 3));
@@ -331,6 +376,11 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
           <stop offset="55%" stopColor="#f0de97" />
           <stop offset="100%" stopColor="#e4c172" />
         </radialGradient>
+        {/* チーズの焦げスポット */}
+        <radialGradient id="cheeseSpotGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#b67f3b" />
+          <stop offset="100%" stopColor="#8a5a27" />
+        </radialGradient>
         {/* トマト・ペパロニなど */}
         <radialGradient id="tomatoGrad" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#ff6b6b" />
@@ -344,6 +394,21 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
           <stop offset="0%" stopColor="#ffe98a" />
           <stop offset="100%" stopColor="#f4c542" />
         </linearGradient>
+        {/* ピザ皿とクラスト */}
+        <radialGradient id="plateGrad" cx="50%" cy="50%" r="65%">
+          <stop offset="0%" stopColor="#f7f7f7" />
+          <stop offset="100%" stopColor="#e0e0e0" />
+        </radialGradient>
+        <linearGradient id="doughGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#f3d4a1" />
+          <stop offset="100%" stopColor="#cfa066" />
+        </linearGradient>
+        <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feOffset dx="0" dy="2" result="off" />
+          <feGaussianBlur in="off" stdDeviation="2" result="blur" />
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.2 0" result="shadow" />
+          <feBlend in="SourceGraphic" in2="shadow" mode="normal" />
+        </filter>
         {/* スライスごとのクリップパス */}
         {slices.map((_, i) => (
           <clipPath id={`slice-clip-${i}`} key={`clip-${i}`}>
@@ -351,6 +416,19 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
           </clipPath>
         ))}
       </defs>
+
+      {/* 背景のプレート */}
+      <circle cx={center} cy={center} r={center - 2} fill="url(#plateGrad)" />
+      {/* クラスト（外周リング） */}
+      <circle
+        cx={center}
+        cy={center}
+        r={radius + 2}
+        fill="none"
+        stroke="url(#doughGrad)"
+        strokeWidth={10}
+        filter="url(#dropShadow)"
+      />
 
       <g className={isSpinning ? 'spinning' : ''} style={{ transformOrigin: 'center' }}>
         {slices.map((slice, index) => {
@@ -361,10 +439,12 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
               <path
                 d={pathD}
                 fill="url(#cheeseGrad)"
-                stroke="#fff"
-                strokeWidth="2"
+                stroke="#b8894c"
+                strokeOpacity={0.6}
+                strokeWidth="1.5"
                 onClick={() => onSliceClick(slice.id)}
                 style={{ cursor: 'pointer' }}
+                filter="url(#dropShadow)"
               />
 
               {/* フレーバーの薄い色味オーバーレイ */}
@@ -372,9 +452,16 @@ const PizzaBoard: React.FC<PizzaBoardProps> = ({
                 <path
                   d={pathD}
                   fill={FLAVOR_OVERLAYS[slice.flavor]}
-                  fillOpacity={0.12}
+                  fillOpacity={0.18}
                 />
               )}
+
+              {/* 薄いトマトソースのリング（中央寄り） */}
+              <path
+                d={getRingPath(index, radius * 0.35, radius * 0.55)}
+                fill="#e74c3c"
+                opacity={0.05}
+              />
 
               {/* トッピングはスライスのクリップ内に描画 */}
               {slice.flavor && (
