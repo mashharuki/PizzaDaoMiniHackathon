@@ -95,6 +95,12 @@ export default function Home() {
               <SpecialPatternDisplay patterns={gameState.specialPatterns} />
             )}
           </div>
+          <StatusPanel
+            score={gameState.currentScore}
+            highScore={highScore}
+            status={gameState.gameStatus}
+            rank={gameState.rank}
+          />
           <div className="mt-8">
             {gameState.gameStatus === 'idle' && (
               <button onClick={startGame} className="rounded bg-blue-500 px-4 py-2 text-white">
@@ -113,12 +119,6 @@ export default function Home() {
               </>
             )}
           </div>
-          <StatusPanel
-            score={gameState.currentScore}
-            highScore={highScore}
-            status={gameState.gameStatus}
-            rank={gameState.rank}
-          />
         </>
       ) : (
         <p className="text-yellow-400">Connect your wallet to play the game.</p>

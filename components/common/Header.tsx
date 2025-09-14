@@ -1,3 +1,4 @@
+import { Button, Icon } from '@/components/common';
 import { Address, Avatar, EthBalance, Identity, Name } from '@coinbase/onchainkit/identity';
 import { useAddFrame, useMiniKit } from '@coinbase/onchainkit/minikit';
 import {
@@ -7,7 +8,6 @@ import {
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
 import { useCallback, useMemo, useState } from 'react';
-import { Button, Icon } from '@/components/common';
 
 /**
  * ヘッダーコンポーネント
