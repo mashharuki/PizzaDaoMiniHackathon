@@ -8,16 +8,25 @@ import { useGame } from '@/lib/game/gameState';
 import { GameErrorType } from '@/types/game';
 import { PIZZA_DAO_MINI_HACKATHON_ABI } from '@/utils/abis/PizzaDaoMiniHackathon';
 import { PIZZA_DAO_MINI_HACKATHON_ADDRESS } from '@/utils/constants';
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import { TransactionError } from '@coinbase/onchainkit/transaction';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function Home() {
+  // MiniKit のコンテキスト（フレーム準備完了フラグやクライアント状態）
+  const { setFrameReady, isFrameReady } = useMiniKit();
   const { gameState, highScore, error, startGame, selectSlice, resetGame, setError, clearError } =
     useGame();
   const { address, isConnected } = useAccount();
   const mainRef = useRef<HTMLDivElement>(null);
   const [boardSize, setBoardSize] = useState(320);
+
+  useEffect(() => {
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [setFrameReady, isFrameReady]);
 
   useEffect(() => {
     const handleResize = () => {
