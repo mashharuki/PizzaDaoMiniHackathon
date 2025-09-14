@@ -10,6 +10,7 @@ import { PIZZA_DAO_MINI_HACKATHON_ABI } from '@/utils/abis/PizzaDaoMiniHackathon
 import { PIZZA_DAO_MINI_HACKATHON_ADDRESS } from '@/utils/constants';
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import { TransactionError } from '@coinbase/onchainkit/transaction';
+import { sdk } from '@farcaster/miniapp-sdk';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -27,6 +28,21 @@ export default function Home() {
       setFrameReady();
     }
   }, [setFrameReady, isFrameReady]);
+
+  // Farcaster Mini App: hide splash screen once content is ready
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        await sdk.actions.ready();
+      } catch (e) {
+        // noop: outside Farcaster environment this can be ignored
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
