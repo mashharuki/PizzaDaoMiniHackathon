@@ -1,6 +1,6 @@
 'use client';
 
-import { PizzaBoard, ScoreDisplay, SpecialPatternDisplay } from '@/components/Game';
+import { PizzaBoard, SpecialPatternDisplay, StatusPanel } from '@/components/Game';
 import { TransactionCard } from '@/components/TransactionCard';
 import ErrorDisplay from '@/components/common/ErrorDisplay';
 import { Header } from '@/components/common/Header';
@@ -100,12 +100,12 @@ export default function Home() {
               </>
             )}
           </div>
-          <div className="mt-4">
-            <ScoreDisplay score={gameState.currentScore} />
-            <p>High Score: {highScore}</p>
-            <p>Status: {gameState.gameStatus}</p>
-            <p>Rank: {gameState.rank}</p>
-          </div>
+          <StatusPanel
+            score={gameState.currentScore}
+            highScore={highScore}
+            status={gameState.gameStatus}
+            rank={gameState.rank}
+          />
         </>
       ) : (
         <p className="text-yellow-400">Connect your wallet to play the game.</p>
