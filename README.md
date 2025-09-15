@@ -20,6 +20,14 @@
 
   [Rarible Testnet](https://testnet.rarible.com/token/base/0x52D89afa637AEF34A6b680c77B366F3c854485d4:0)
 
+## Screenshot
+
+![](./docs/imgs/0.png)
+
+![](./docs/imgs/1.png)
+
+![](./docs/imgs/2.png)
+
 ## Overview
 
 Pizza Roulette Game is a single-screen Web3 mini-game that runs as a Farcaster MiniApp.
