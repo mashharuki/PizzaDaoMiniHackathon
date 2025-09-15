@@ -20,6 +20,10 @@
 
   [Rarible Testnet](https://testnet.rarible.com/token/base/0x52D89afa637AEF34A6b680c77B366F3c854485d4:0)
 
+## Demo Video
+
+[Youtube](https://youtu.be/grGPujEIjdw)
+
 ## Screenshot
 
 ![](./docs/imgs/0.png)
